@@ -7,5 +7,6 @@ if(mysqli_connect_errno()){
     die();
 }
 
+// define('BASEURL', "/shopping/");
 
 ?>
