@@ -1,9 +1,8 @@
 </div>
 
-
-<footer class="text-center" id="footer">
-	&copy; Copyright 2017 Shaunta's Boutique
-</footer>
+<div class="col-md-12 text-center">
+    &copy; Copyright 2017 Shaunta's Boutique
+</div>
 
 <script>
 	jQuery(window).scroll(function(){
