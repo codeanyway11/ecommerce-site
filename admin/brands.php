@@ -2,13 +2,40 @@
 require_once '../core/init.php';
 include 'includes/head.php';
 include 'includes/navigation.php';
+include_once '../helpers/helpers.php';
+
 $sql = "SELECT * FROM brands ORDER BY brand";
 $results = $db->query($sql);
+$errors = array();
+
+//If add form is submitted
+if(isset($_POST['add_submit'])){
+    $brand = sanitize($_POST['brand']);
+    if($_POST['brand'] == ' '){
+        $errors[] .= 'You must enter a brand!';
+    }
+
+    if(!empty($errors)){
+        display_errors($errors);
+    } else {
+        $sql = "SELECT * FROM brands WHERE brand = '$brand'";
+        $result = $db->query($sql);
+        $count = mysqli_num_rows($result);
+        if($count){
+            $errors[] .= 'This brand already exists in the Database!';
+            display_errors($errors);
+        } else {
+            $sql = "INSERT into brands (brand) VALUES ('$brand')";
+            $db->query($sql);
+            header('Location: brands.php');
+        }
+    }
+}
+
 ?>
 
 <h2 class="text-center">Brands</h2><hr>
-
-<div>
+<div class="text-center">
     <form class="form-inline" action="brands.php" method="post">
         <div class="form-group">
             <label for="brand">Add a Brand:</label>
@@ -16,8 +43,10 @@ $results = $db->query($sql);
             <input type="submit" name="add_submit" value="Add Brand" class="btn btn-lg btn-success">        </div>
         </form>
     </div>
+    <br>
+    <hr>
 
-    <table class="table table-ordered table-striped table-auto">
+    <table class="table table-ordered table-striped table-auto table-condensed">
         <thead>
             <th></th>
             <th>Brands</th>
@@ -33,7 +62,7 @@ $results = $db->query($sql);
             <?php endwhile; ?>
         </tbody>
     </table>
-
+    <br>
 
 
     <?php
