@@ -25,8 +25,8 @@
 function detailsmodal(id){
     var data = {"id" : id};
     jQuery.ajax({
-        url: "includes/detailsmodal.php",
-        // url : 'shopping/includes/detailsmodal.php'
+        // url: "includes/detailsmodal.php",
+        url : '/shopping/includes/detailsmodal.php'
         method: "post",
         data: data,
         success: function(data){

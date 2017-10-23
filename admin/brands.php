@@ -8,6 +8,16 @@ $sql = "SELECT * FROM brands ORDER BY brand";
 $results = $db->query($sql);
 $errors = array();
 
+if(isset($_GET['delete']) && !empty($_GET['delete'])){
+    $delete_id = (int)$_GET['delete'];
+    $delete_id = sanitize($delete_id);
+    // echo $delete_id;
+    $sql = "DELETE FROM brands WHERE id = '$delete_id'";
+    $db->query($sql);
+    header('Location: brands.php');
+}
+
+
 //If add form is submitted
 if(isset($_POST['add_submit'])){
     $brand = sanitize($_POST['brand']);
