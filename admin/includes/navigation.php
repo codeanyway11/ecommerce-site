@@ -8,6 +8,7 @@ $pquery = $db->query($sql);
         <a href="index.php" class="navbar-brand">Shaunta's Boutique Admin</a>
         <ul class="nav navbar-nav">
             <li><a href="brands.php">Brands</a></li>
+            <li><a href="categories.php">Categories</a></li>
         </ul>
     </div>
 </nav>
