@@ -9,6 +9,23 @@ $sql = "SELECT * FROM categories WHERE parent = 0";
 $result = $db->query($sql);
 $errors = array();
 
+//Delete category
+if(isset($_GET['delete']) && !empty($_GET['delete'])){
+    $delete_id = $_GET['delete'];
+    $delete_id = sanitize($delete_id);
+    $sql = "SELECT * FROM categories WHERE id = '$delete_id'";
+    $result = $db->query($sql);
+    $category = mysqli_fetch_assoc($result);
+    if($category['parent'] == 0){
+        $sql = "DELETE from categories WHERE parent = '$delete_id'";
+        $result = $db->query($sql);
+    }
+    $dsql = "DELETE FROM categories WHERE id = '$delete_id'";
+    $db->query($dsql);
+    header('Location: categories.php');
+}
+
+
 if(isset($_POST) && !empty($_POST)){
     $parent = sanitize($_POST['parent']);
     $category = sanitize($_POST['category']);

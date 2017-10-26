@@ -14,9 +14,6 @@ $featured = $db->query($sql);
     <div class="row">
         <h2 class="text-center">Feature Products</h2>
         <?php while($product = mysqli_fetch_assoc($featured)) : ?>
-            <?php
-            // var_dump($product);
-            ?>
             <div class="col-md-3 text-center">
                 <h4> <?php echo $product['title'] ?></h4>
                 <img src= "<?php echo $product['image'] ?>" alt="<?php echo $product['title'] ?>" class="img-thumb" />
