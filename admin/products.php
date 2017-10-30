@@ -29,7 +29,7 @@ if(isset($_GET['add'])  || isset($_GET['edit'])  ){
     $sizes = ((isset($_POST['sizes'])) && $_POST['sizes']!= '')?sanitize($_POST['sizes']):'';
     $sizes = rtrim($sizes, ',');
     $saved_image = '';
-    $db_path = '';
+    $dbpath = '';
     $tmpLoc = '';
     $uploadPath = '';
 
@@ -55,7 +55,7 @@ if(isset($_GET['add'])  || isset($_GET['edit'])  ){
         $sizes = ((isset($_POST['sizes'])) && !empty($_POST['sizes']))?sanitize($_POST['sizes']): $product['sizes'];
         $sizes = rtrim($sizes, ',');
         $saved_image = (($product['image'] != '')?'http://localhost/shopping/'.$product['image']:'');
-        $db_path = $product['image'];
+        $dbpath = $product['image'];
     }
 
     if(!empty($sizes)){
@@ -78,7 +78,7 @@ if(isset($_GET['add'])  || isset($_GET['edit'])  ){
     }
 
     if($_POST){
-        $dbpath = '';
+        // $dbpath = '';
         $errors = array();
 
         $required = array('title', 'brand', 'price', 'parent', 'child', 'sizes');
@@ -133,7 +133,9 @@ if(isset($_GET['add'])  || isset($_GET['edit'])  ){
         if(!empty($errors)){
             display_errors($errors);
         } else{
-            move_uploaded_file($tmpLoc, $uploadPath);
+            if(!empty($_FILES)){
+                move_uploaded_file($tmpLoc, $uploadPath);
+            }
             $insertSql = "INSERT INTO products (`title`, `price`, `list_price`, `brand`, `categories`, `sizes`, `image`, `description`) VALUES ('$title', '$price', '$list_price', '$brand', '$category', '$sizes', '$dbpath', '$description')";
 
             if (isset($_GET['edit'])) {

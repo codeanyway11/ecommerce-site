@@ -44,7 +44,7 @@ $size_array = explode(',', $sizestring);
                                     <div class="form-group">
                                         <div class="col-xs-3">
                                             <label for="quantity"> Quantity: </label>
-                                            <input type="text" class="form-control" id="quantity" name="quantity">
+                                            <input type="number" min="0" class="form-control" id="quantity" name="quantity">
                                         </div>
                                         <div class="col-xs-9"></div>
                                         <p>Available: 3</p>
