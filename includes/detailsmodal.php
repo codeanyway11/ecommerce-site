@@ -10,6 +10,7 @@ $sql2 = "SELECT brand FROM brands WHERE id = '$brand_id'";
 $brand_query = $db->query($sql2);
 $brand = mysqli_fetch_assoc($brand_query);
 $sizestring = $product['sizes'];
+$sizestring = rtrim($sizestring, ',');
 $size_array = explode(',', $sizestring);
 ?>
 
