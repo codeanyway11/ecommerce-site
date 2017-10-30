@@ -39,6 +39,37 @@ function detailsmodal(id){
         },
     });
 }
+
+function add_to_cart(){
+    jQuery('#modal_errors').html("");
+    var size = jQuery('#size').val();
+    var quantity = jQuery('#quantity').val();
+    var available = jQuery('#available').val();
+    var error = '';
+    var data = jQuery('#add_product_form').serialize();
+    if(size == '' || quantity == '' || quantity == 0){
+        error += '<p class="text-center text-danger">You must choose a size & a quantity!</p>';
+        jQuery('#modal_errors').html(error);
+        return;
+    }else if (quantity > available) {
+        error += '<p class="text-center text-danger">There are only '+available+' available!</p>';
+        jQuery('#modal_errors').html(error);
+        return;
+    }else{
+        console.log("ajax");
+        jQuery.ajax({
+            url: '/shopping/admin/parsers/add_cart.php',
+            method: 'post',
+            data :data,
+            success: function(){
+                location.reload();
+            },
+            error: function(){
+                alert('Something went wrong!');
+            }
+        });
+    }
+}
 </script>
 
 </body>
