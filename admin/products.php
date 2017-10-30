@@ -4,6 +4,12 @@ require_once '../core/init.php';
 include 'includes/head.php';
 include 'includes/navigation.php';
 
+if(isset($_GET['delete'])){
+    $id = sanitize($_GET['delete']);
+    $db->query("UPDATE products SET deleted =1 WHERE id = '$id'");
+    header('Location: products.php'); 
+}
+
 if(isset($_GET['add'])  || isset($_GET['edit'])  ){
     $category = '';
     $bQuery = "SELECT * FROM brands ORDER by brand";
