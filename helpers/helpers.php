@@ -65,4 +65,15 @@ function pretty_permissions($permissions){
     $permissions =ucwords($permissions);
     return $permissions;
 }
+
+function get_category($child_id){
+    global $db;
+    $id = sanitize($child_id);
+    $querySql = "SELECT p.id AS 'pid', p.category AS 'parent', c.id AS 'cid', c.category AS 'child' FROM categories c INNER JOIN categories p on c.parent = p.id WHERE c.id='$id'";
+    $productQ = $db->query($querySql);
+    $category = mysqli_fetch_assoc($productQ);
+    return $category;
+
+}
+
 ?>
