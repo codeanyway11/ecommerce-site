@@ -44,7 +44,8 @@ body{
             if(!empty($errors)){
                 display_errors($errors);
             }else{
-                echo 'log user in';
+                $user_id = $user['id'];
+                login($user_id);
             }
         }
 
