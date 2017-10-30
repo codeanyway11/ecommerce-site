@@ -35,8 +35,8 @@ function login($user_id){
 }
 
 function login_error_redirect($url = 'login.php'){
-     $_SESSION['error_flash'] ="You must be logged in to view this page!";
-     header('Location: '.$url);
+    $_SESSION['error_flash'] ="You must be logged in to view this page!";
+    header('Location: '.$url);
 
 }
 
@@ -55,4 +55,14 @@ function permission_error_redirect($url = 'login.php'){
 
 }
 
+function pretty_date($date){
+    return date("M d, Y h:i A", strtotime($date));
+}
+
+function pretty_permissions($permissions){
+    $arr = explode(',' ,$permissions);
+    $permissions = implode(', ', $arr);
+    $permissions =ucwords($permissions);
+    return $permissions;
+}
 ?>
