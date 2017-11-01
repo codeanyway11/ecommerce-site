@@ -19,9 +19,10 @@ $product = mysqli_fetch_assoc($query);
 $_SESSION['success_flash'] = $product['title']. ' was added to your cart.';
 $_SESSION['success_flash'] = $cart_id. ' was added to your cart.';
 
-if($cart_id!='0'){
+if($cart_id!='' && $cart_id!='0'){
     $cartQ = $db->query("SELECT * FROM cart WHERE id = '{$cart_id}'");
     $cart = mysqli_fetch_assoc($cartQ);
+    $previous_items = [];
     $previous_items = json_decode($cart['items'], true);
     $item_match = 0;
     $new_items = array();

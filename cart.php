@@ -8,8 +8,11 @@ include 'includes/leftbar.php';
 if($cart_id !='' && $cart_id!='0'){
     $cartQ = $db->query("SELECT * FROM cart WHERE id = '$cart_id'");
     $result = mysqli_fetch_assoc($cartQ);
+    $items = [];
+    if($result)
     $items = json_decode($result['items'], true);
     $i =1; $sub_total =0; $item_count =0;
+    $tax= 0; $grand_total =0;
 }
 
 ?>
@@ -51,7 +54,15 @@ if($cart_id !='' && $cart_id!='0'){
                             <td><?=$i;?></td>
                             <td><?=$product['title']; ?></td>
                             <td><?=money($product['price']); ?></td>
-                            <td><?=$item['quantity']; ?></td>
+                            <td>
+                                <button class="btn btn-xs btn-default" onclick="update_cart('removeone', '<?=$product['id'];?>', '<?=$item['size']; ?>');">-</button>
+                                <?=$item['quantity']; ?>
+                                <?php if($item['quantity'] < $available): ?>
+                                    <button class="btn btn-xs btn-default" onclick="update_cart('addone', '<?=$product['id'];?>', '<?=$item['size']; ?>');">+</button>
+                                <?php else: ?>
+                                    <span class="text-danger">Max</span>
+                                <?php endif; ?>
+                            </td>
                             <td><?=$item['size']; ?></td>
                             <td><?=money($product['price'] * $item['quantity']); ?></td>
                         </tr>
@@ -62,61 +73,61 @@ if($cart_id !='' && $cart_id!='0'){
                         $sub_total += $product['price'] * $item['quantity'];
                     }
 
-                    $tax = TAXRATE * $sub_total;
-                    $tax = number_format($tax, 2);
-                    $grand_total = $tax + $sub_total;
-                    ?>
-                </tbody>
-            </table>
-            <table class="table table-bordered table-condensed table-striped text-right">
-                <legend>Totals</legend>
-                <thead class="totals-table-header">
-                    <th>Total Items</th>
-                    <th>Sub Total</th>
-                    <th>Tax</th>
-                    <th>Total Amount</th>
-                </thead>
-                <tbody>
-                    <tr>
-                        <td><?=$item_count;?></td>
-                        <td><?=money($sub_total);?></td>
-                        <td><?=money($tax);?></td>
-                        <td class="bg-success"><?=money($grand_total);?></td>
-                    </tr>
-                </tbody>
-            </table>
-            <!-- Trigger the modal with a button -->
-            <button type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#checkoutModal">
-                <span class="glyphicon glyphicon-shopping-cart"></span>Checkout <<
-            </button>
+                        $tax = TAXRATE * $sub_total;
+                        $tax = number_format($tax, 2);
+                        $grand_total = $tax + $sub_total;
+                        ?>
+                    </tbody>
+                </table>
+                <table class="table table-bordered table-condensed table-striped text-right">
+                    <legend>Totals</legend>
+                    <thead class="totals-table-header">
+                        <th>Total Items</th>
+                        <th>Sub Total</th>
+                        <th>Tax</th>
+                        <th>Total Amount</th>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td><?=$item_count;?></td>
+                            <td><?=money($sub_total);?></td>
+                            <td><?=money($tax);?></td>
+                            <td class="bg-success"><?=money($grand_total);?></td>
+                        </tr>
+                    </tbody>
+                </table>
+                <!-- Trigger the modal with a button -->
+                <button type="button" class="btn btn-info btn-lg pull-right" data-toggle="modal" data-target="#checkoutModal">
+                    <span class="glyphicon glyphicon-shopping-cart"></span>Checkout <<
+                </button>
 
-            <!-- Modal -->
-            <div id="checkoutModal" class="modal fade" role="dialog">
-                <div class="modal-dialog">
+                <!-- Modal -->
+                <div id="checkoutModal" class="modal fade" role="dialog">
+                    <div class="modal-dialog">
 
-                    <!-- Modal content-->
-                    <div class="modal-content">
-                        <div class="modal-header">
-                            <button type="button" class="close" data-dismiss="modal">&times;</button>
-                            <h4 class="modal-title" id="checkoutModalLabel">Shipping Address</h4>
+                        <!-- Modal content-->
+                        <div class="modal-content">
+                            <div class="modal-header">
+                                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                                <h4 class="modal-title" id="checkoutModalLabel">Shipping Address</h4>
+                            </div>
+                            <div class="modal-body">
+                                <p>Some text in the modal.</p>
+                            </div>
+                            <div class="modal-footer">
+                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            </div>
                         </div>
-                        <div class="modal-body">
-                            <p>Some text in the modal.</p>
-                        </div>
-                        <div class="modal-footer">
-                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                        </div>
+
                     </div>
-
                 </div>
-            </div>
-        <?php endif; ?>
+            <?php endif; ?>
+        </div>
+
+
     </div>
 
-
-</div>
-
-<?php
-include 'includes/rightbar.php';
-include 'includes/footer.php';
-?>
+    <?php
+    include 'includes/rightbar.php';
+    include 'includes/footer.php';
+    ?>
