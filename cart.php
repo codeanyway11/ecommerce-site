@@ -115,6 +115,12 @@ if($cart_id !='' && $cart_id!='0'){
                             <div class="row">
                                 <form id="payment-form" action="thankYou.php" method="post">
                                     <span class="bg-danger" id="payment-errors"></span>
+                                    <input type="hidden" name="tax" value="<?=$tax;?>">
+                                    <input type="hidden" name="sub_total" value="<?=$sub_total;?>">
+                                    <input type="hidden" name="grand_total" value="<?=$grand_total;?>">
+                                    <input type="hidden" name="cart_id" value="<?=$cart_id;?>">
+                                    <input type="hidden" name="description" value="<?=$item_count.' item'.(($item_count>1)?'s':'';).' from Shaunta\'s boutique!'?>">
+
                                     <div id="step1" style="display:block;">
                                         <div class="form-group col-md-6">
                                             <label for="full_name">Full Name:</label>
@@ -149,57 +155,67 @@ if($cart_id !='' && $cart_id!='0'){
                                             <input type="text" name="country" id="country" class="form-control" value="">
                                         </div>
                                     </div>
-                                    <div id="step2" style="display:none;">
-                                        <div class="form-group col-md-3">
-                                            <label for="name">Name on Card:</label>
-                                            <input type="text" id="name" class="form-control">
+                                    <!-- <div id="step2" style="display:none;">
+                                        <div class="form-row">
+                                            <label for="card-element">
+                                                Credit or debit card
+                                            </label>
+                                            <div id="card-element">
+                                            </div>
+                                            <div id="card-errors" role="alert"></div>
                                         </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="card_number">Card Number:</label>
-                                            <input type="number" id="card_number" class="form-control">
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="cvc">CVC:</label>
-                                            <input type="number" id="cvc" class="form-control">
-                                        </div>
-                                        <div class="form-group col-md-2">
-                                            <label for="expire_month">Expire Month:</label>
-                                            <select class="form-control" name="expire_month" id="expire_month">
-                                                <option value=""></option>
-                                                <?php for($i =1; $i<13; $i++): ?>
-                                                    <option value="<?=$i;?>"><?=$i;?></option>
-                                                <?php endfor; ?>
-                                            </select>
-                                        </div>
-                                        <div class="form-group col-md-3">
-                                            <label for="expire_year">Expire Year:</label>
-                                            <select class="form-control" name="expire_year" id="expire_year">
-                                                <option value=""></option>
-                                                <?php $yr= date("Y"); ?>
-                                                <?php for($i =1; $i<11; $i++): ?>
-                                                    <option value="<?=$yr + $i;?>"><?=$yr + $i;?></option>
-                                                <?php endfor; ?>
-                                            </select>
-                                        </div>
+                                    </div> -->
+
+                                    <div class="form-group col-md-3">
+                                        <label for="name">Name on Card:</label>
+                                        <input type="text" id="name" class="form-control" data-stripe="name">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="card_number">Card Number:</label>
+                                        <input type="number" id="card_number" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="cvc">CVC:</label>
+                                        <input type="number" id="cvc" class="form-control">
+                                    </div>
+                                    <div class="form-group col-md-2">
+                                        <label for="expire_month">Expire Month:</label>
+                                        <select class="form-control" name="expire_month" id="expire_month">
+                                            <option value=""></option>
+                                            <?php for($i =1; $i<13; $i++): ?>
+                                                <option value="<?=$i;?>"><?=$i;?></option>
+                                            <?php endfor; ?>
+                                        </select>
+                                    </div>
+                                    <div class="form-group col-md-3">
+                                        <label for="expire_year">Expire Year:</label>
+                                        <select class="form-control" name="expire_year" id="expire_year">
+                                            <option value=""></option>
+                                            <?php $yr= date("Y"); ?>
+                                            <?php for($i =1; $i<11; $i++): ?>
+                                                <option value="<?=$yr + $i;?>"><?=$yr + $i;?></option>
+                                            <?php endfor; ?>
+                                        </select>
                                     </div>
                                 </div>
-
-                            </div>
-                            <div class="modal-footer">
-                                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                                <button type="button" class="btn btn-primary" onclick="check_address();" id="next_button" >Next >></button>
-                                <button type="button" class="btn btn-primary" onclick="back_address();" id="back_button" style="display:none;"><< Back</button>
-                                <button type="submit" class="btn btn-primary" onclick="check_address();" id="check_out_button" style="display:none;">Check Out >></button>
-
-                            </form>
                             </div>
 
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                            <button type="button" class="btn btn-primary" onclick="check_address();" id="next_button" >Next >></button>
+                            <button type="button" class="btn btn-primary" onclick="back_address();" id="back_button" style="display:none;"><< Back</button>
+                            <button type="submit" class="btn btn-primary" onclick="check_address();" id="check_out_button" style="display:none;">Check Out >></button>
+
+                        </form>
                     </div>
 
                 </div>
+
             </div>
-        <?php endif; ?>
-    </div>
+        </div>
+    <?php endif; ?>
+</div>
 
 
 </div>
@@ -249,6 +265,55 @@ function check_address(){
         }
     });
 }
+
+var stripe = Stripe('pk_test_UWQMSvpYqzk5DtEOJEZh8WkA');
+var style = {
+  base: {
+    fontSize: '16px',
+    lineHeight: '24px'
+  }
+};
+var elements = stripe.elements();
+
+var card = elements.create('card', {style: style});
+card.mount('#card-element');
+
+function stripeTokenHandler(token) {
+  var form = document.getElementById('payment-form');
+  var hiddenInput = document.createElement('input');
+  hiddenInput.setAttribute('type', 'hidden');
+  hiddenInput.setAttribute('name', 'stripeToken');
+  hiddenInput.setAttribute('value', token.id);
+  form.appendChild(hiddenInput);
+
+  // Submit the form
+  form.submit();
+}
+
+card.addEventListener('change', function(event) {
+  var displayError = document.getElementById('card-errors');
+  if (event.error) {
+    displayError.textContent = event.error.message;
+  } else {
+    displayError.textContent = '';
+  }
+});
+
+var form = document.getElementById('payment-form');
+form.addEventListener('submit', function(event) {
+  event.preventDefault();
+
+  stripe.createToken(card).then(function(result) {
+    if (result.error) {
+      // Inform the customer that there was an error
+      var errorElement = document.getElementById('card-errors');
+      errorElement.textContent = result.error.message;
+    } else {
+      // Send the token to your server
+      stripeTokenHandler(result.token);
+    }
+  });
+});
 </script>
 
 <?php
