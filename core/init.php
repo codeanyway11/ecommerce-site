@@ -9,6 +9,8 @@ if(mysqli_connect_errno()){
 session_start();
 require_once $_SERVER['DOCUMENT_ROOT'].'/shopping/config.php';
 require_once BASEURL.'helpers/helpers.php';
+require_once BASEURL.'vendor/autoload.php';
+
 
 $cart_id = '';
 if(isset($_COOKIE[CART_COOKIE])){
